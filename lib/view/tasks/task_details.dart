@@ -182,6 +182,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                                     maxLines: 10,
                                     autofocus: false,
                                     controller: _descriptionController,
+                                    keyboardType: TextInputType.name,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: 'Description',

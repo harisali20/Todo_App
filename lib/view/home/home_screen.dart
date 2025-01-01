@@ -236,6 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   cursorColor: whiteColor,
                                   maxLines: 10,
                                   autofocus: false,
+                                  keyboardType: TextInputType.name,
                                   controller: _descriptionController,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
