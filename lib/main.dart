@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_task/view/auth/forgot_password_screen.dart';
-import 'package:todo_app_task/view/auth/loginscreen.dart';
+import 'package:todo_app_task/view/auth/signin.dart';
 import 'package:todo_app_task/view/auth/signup.dart';
 import 'package:todo_app_task/view/home/home_screen.dart';
 import 'package:todo_app_task/view/splash_screen.dart';

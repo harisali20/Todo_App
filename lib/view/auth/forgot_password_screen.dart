@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_app_task/Utility.dart';
 import 'package:todo_app_task/Utility.dart';
 class ForgotPasswordScreen extends StatefulWidget {
-  final String email;
-  final String password;
-  const ForgotPasswordScreen({super.key, required this.email, required this.password});
+  const ForgotPasswordScreen({super.key});
 
 
   @override
@@ -13,8 +11,9 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _oldPasswordController = TextEditingController();
+  final TextEditingController _newPasswordController = TextEditingController();
   bool isPasswordVisible = false;
   bool isConfirmPasswordVisible = false;
   @override
@@ -46,7 +45,19 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextField(
-                      controller: _passwordController,
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        hintText: 'Enter email',
+                        enabledBorder: borderDecor(textFieldColor),
+                        focusedBorder: borderDecor(textFieldColor),
+                        hintStyle: TextStyle(
+                          color: textFieldColor,
+                        ),
+                      ),
+                    ),
+                    TextField(
+                      controller: _oldPasswordController,
                       obscureText: isPasswordVisible,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
@@ -61,7 +72,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                     ),
                     TextField(
-                      controller: _confirmPasswordController,
+                      controller: _newPasswordController,
                       obscureText: isConfirmPasswordVisible,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
@@ -86,8 +97,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   bottom: mq.size.height * 0.02),
               child: ElevatedButton(
                 onPressed: () async {
-                  await FirebaseFirestore.instance.collection('users').doc(fetchDocId(widget.email,widget.password) as String?).update({
-                    'password': _passwordController.text,
+                  await FirebaseFirestore.instance.collection('users').doc(fetchDocId(_emailController.text,_oldPasswordController.text) as String?).update({
+                    'password': _newPasswordController.text,
                   });
                   ScaffoldMessenger.of(context).showSnackBar(
                     snackBar('Password Changed Successfully')

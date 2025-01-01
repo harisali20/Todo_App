@@ -48,7 +48,6 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData mq = MediaQuery.of(context);
-
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -115,7 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen(email: _emailController.text,password: _passwordController.text)));
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const ForgotPasswordScreen()));
                   },
                   child: Text(
                     'Forgot Password?',

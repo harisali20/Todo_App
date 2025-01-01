@@ -326,10 +326,10 @@ class _TaskDetailsState extends State<TaskDetails> {
         ],
       ),
       body: task == null
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : Padding(
-        padding: EdgeInsets.symmetric(horizontal: mq.size.width * 0.05),
-        child: Column(
+                  padding: EdgeInsets.symmetric(horizontal: mq.size.width * 0.05),
+                  child: Column(
           children: [
             Align(
               alignment: Alignment.topLeft,
@@ -341,8 +341,7 @@ class _TaskDetailsState extends State<TaskDetails> {
                 ],
               ),
             ),
-            // get the image path from firebase which is stored in device storage and display it here
-            Image(image: FileImage(File(task!['image']))),
+            task!['image'].toString().isEmpty ? Text('') :Image(image: FileImage(File(task!['image']))),
 
             Spacer(),
             Align(
@@ -356,8 +355,8 @@ class _TaskDetailsState extends State<TaskDetails> {
               ),
             ),
           ],
-        ),
-      ),
+                  ),
+                ),
     );
   }
 }

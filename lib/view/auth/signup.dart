@@ -62,6 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         TextField(
                           controller: _fullNameController,
+                            keyboardType: TextInputType.name,
                           decoration: InputDecoration(
                             enabledBorder: borderDecor(textFieldColor),
                             focusedBorder: borderDecor(textFieldColor),

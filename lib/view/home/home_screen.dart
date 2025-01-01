@@ -8,8 +8,6 @@ import 'package:todo_app_task/main.dart';
 import 'package:todo_app_task/view/home/settings_screen.dart';
 import 'package:todo_app_task/view/tasks/task_details.dart';
 
-import '../../model/todo_model.dart';
-
 import 'package:intl/intl.dart';
 
 final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
@@ -82,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           final tasks = snapshot.data!.docs;
@@ -195,171 +193,173 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ],
                   ),
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: mq.size.height * 0.01),
-                          child: Container(
-                            height: mq.size.height * 0.01,
-                            width: mq.size.width * 0.2,
-                            decoration: BoxDecoration(
-                              color: whiteColor,
-                              borderRadius: BorderRadius.circular(20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Center(
+                          child: Padding(
+                            padding: EdgeInsets.only(top: mq.size.height * 0.01),
+                            child: Container(
+                              height: mq.size.height * 0.01,
+                              width: mq.size.width * 0.2,
+                              decoration: BoxDecoration(
+                                color: whiteColor,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: mq.size.height * 0.8,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: mq.size.width * 0.05),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              TextField(
-                                style: TextStyle(color: whiteColor),
-                                cursorColor: whiteColor,
-                                controller: _titleController,
-                                decoration: InputDecoration(
-                                  hintText: 'Title',
-                                  enabledBorder: borderDecor(whiteColor),
-                                  focusedBorder: borderDecor(whiteColor),
-                                  hintStyle: TextStyle(color: whiteColor),
-                                  suffixIconColor: textFieldColor,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(mq.size.width * 0.02),
-                                child: TextField(
+                        SizedBox(
+                          height: mq.size.height * 0.8,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: mq.size.width * 0.05),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                TextField(
                                   style: TextStyle(color: whiteColor),
                                   cursorColor: whiteColor,
-                                  maxLines: 10,
-                                  autofocus: false,
-                                  keyboardType: TextInputType.name,
-                                  controller: _descriptionController,
+                                  controller: _titleController,
                                   decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Description',
+                                    hintText: 'Title',
                                     enabledBorder: borderDecor(whiteColor),
                                     focusedBorder: borderDecor(whiteColor),
                                     hintStyle: TextStyle(color: whiteColor),
                                     suffixIconColor: textFieldColor,
                                   ),
                                 ),
-                              ),
-                              TextField(
-                                style: TextStyle(color: whiteColor),
-                                cursorColor: whiteColor,
-                                canRequestFocus: false,
-                                controller: _dateController,
-                                decoration: InputDecoration(
-                                  hintText: 'Deadline(Optional)',
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      showDatePicker(
-                                        context: context,
-                                        initialDate: DateTime.now(),
-                                        firstDate: DateTime.now(),
-                                        lastDate: DateTime(2025),
-                                      ).then((date) {
-                                        if (date != null) {
-                                          showTimePicker(
-                                            context: context,
-                                            initialTime: TimeOfDay.now(),
-                                          ).then((time) {
-                                            if (time != null) {
-                                              final DateTime dateTime = DateTime(
-                                                date.year,
-                                                date.month,
-                                                date.day,
-                                                time.hour,
-                                                time.minute,
-                                              );
-                                              _dateController.text = formatter.format(dateTime);
-                                            }
-                                          });
-                                        }
-                                      });
-                                    },
-                                    icon: const Icon(Icons.calendar_today_outlined),
+                                Padding(
+                                  padding: EdgeInsets.all(mq.size.width * 0.02),
+                                  child: TextField(
+                                    style: TextStyle(color: whiteColor),
+                                    cursorColor: whiteColor,
+                                    maxLines: 10,
+                                    autofocus: false,
+                                    keyboardType: TextInputType.name,
+                                    controller: _descriptionController,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Description',
+                                      enabledBorder: borderDecor(whiteColor),
+                                      focusedBorder: borderDecor(whiteColor),
+                                      hintStyle: TextStyle(color: whiteColor),
+                                      suffixIconColor: textFieldColor,
+                                    ),
                                   ),
-                                  border: borderDecor(whiteColor),
-                                  focusedBorder: borderDecor(whiteColor),
-                                  enabledBorder: borderDecor(whiteColor),
-                                  hintStyle: TextStyle(color: whiteColor),
-                                  suffixIconColor: whiteColor,
                                 ),
-                              ),
-                              TextField(
-                                style: TextStyle(color: whiteColor),
-                                cursorColor: whiteColor,
-                                canRequestFocus: false,
-                                controller: _imageController,
-                                decoration: InputDecoration(
-                                  fillColor: whiteColor,
-                                  enabledBorder: borderDecor(whiteColor),
-                                  focusedBorder: borderDecor(whiteColor),
-                                  hintText: 'Add Image(Optional)',
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) {
-                                          return AlertDialog(
-                                            title: Text('Add Image'),
-                                            content: SizedBox(
-                                              height: mq.size.height * 0.15,
-                                              child: Column(
-                                                children: [
-                                                  ElevatedButton(
-                                                    onPressed: () async {
-                                                        await _pickImage(ImageSource.camera);
+                                TextField(
+                                  style: TextStyle(color: whiteColor),
+                                  cursorColor: whiteColor,
+                                  canRequestFocus: false,
+                                  controller: _dateController,
+                                  decoration: InputDecoration(
+                                    hintText: 'Deadline(Optional)',
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime.now(),
+                                          lastDate: DateTime(2025),
+                                        ).then((date) {
+                                          if (date != null) {
+                                            showTimePicker(
+                                              context: context,
+                                              initialTime: TimeOfDay.now(),
+                                            ).then((time) {
+                                              if (time != null) {
+                                                final DateTime dateTime = DateTime(
+                                                  date.year,
+                                                  date.month,
+                                                  date.day,
+                                                  time.hour,
+                                                  time.minute,
+                                                );
+                                                _dateController.text = formatter.format(dateTime);
+                                              }
+                                            });
+                                          }
+                                        });
+                                      },
+                                      icon: const Icon(Icons.calendar_today_outlined),
+                                    ),
+                                    border: borderDecor(whiteColor),
+                                    focusedBorder: borderDecor(whiteColor),
+                                    enabledBorder: borderDecor(whiteColor),
+                                    hintStyle: TextStyle(color: whiteColor),
+                                    suffixIconColor: whiteColor,
+                                  ),
+                                ),
+                                TextField(
+                                  style: TextStyle(color: whiteColor),
+                                  cursorColor: whiteColor,
+                                  canRequestFocus: false,
+                                  controller: _imageController,
+                                  decoration: InputDecoration(
+                                    fillColor: whiteColor,
+                                    enabledBorder: borderDecor(whiteColor),
+                                    focusedBorder: borderDecor(whiteColor),
+                                    hintText: 'Add Image(Optional)',
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) {
+                                            return AlertDialog(
+                                              title: Text('Add Image'),
+                                              content: SizedBox(
+                                                height: mq.size.height * 0.15,
+                                                child: Column(
+                                                  children: [
+                                                    ElevatedButton(
+                                                      onPressed: () async {
+                                                          await _pickImage(ImageSource.camera);
+                                                          Navigator.pop(context);
+                                                      },
+                                                      child: Text('Camera'),
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () async {
+                                                        await _pickImage(ImageSource.gallery);
                                                         Navigator.pop(context);
-                                                    },
-                                                    child: Text('Camera'),
-                                                  ),
-                                                  ElevatedButton(
-                                                    onPressed: () async {
-                                                      await _pickImage(ImageSource.gallery);
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Text('Gallery'),
-                                                  ),
-                                                ],
+                                                      },
+                                                      child: Text('Gallery'),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                        },
-                                      );
-                                    },
-                                    icon: const Icon(Icons.insert_photo_outlined),
-                                  ),
-                                  border: borderDecor(whiteColor),
-                                  hintStyle: TextStyle(color: whiteColor),
-                                  suffixIconColor: whiteColor,
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () async {
-                                  await _addTask();
-                                  Navigator.pop(context);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  minimumSize: Size(mq.size.width, mq.size.height * 0.07),
-                                  foregroundColor: buttonColor,
-                                  backgroundColor: whiteColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(mq.size.width * 0.05),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      icon: const Icon(Icons.insert_photo_outlined),
+                                    ),
+                                    border: borderDecor(whiteColor),
+                                    hintStyle: TextStyle(color: whiteColor),
+                                    suffixIconColor: whiteColor,
                                   ),
                                 ),
-                                child: const Text('ADD TODO'),
-                              ),
-                            ],
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    await _addTask();
+                                    Navigator.pop(context);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: Size(mq.size.width, mq.size.height * 0.07),
+                                    foregroundColor: buttonColor,
+                                    backgroundColor: whiteColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(mq.size.width * 0.05),
+                                    ),
+                                  ),
+                                  child: const Text('ADD TODO'),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               );

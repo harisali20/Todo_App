@@ -93,6 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       await FirebaseFirestore.instance.collection('users').doc(prefs?.getString('userId')).update({
                                         'fullName': _fullNameController.text,
                                       });
+                                      _loadUserData();
                                       Navigator.pop(context);
                                     },
                                     child: const Text('Save'),
@@ -164,7 +165,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ElevatedButton(
                       onPressed: () {
                         prefs?.setBool('isLoggedIn', false);
-                        Navigator.popUntil(context, (route) => route.isFirst);
+                        Navigator.popUntil(context, ModalRoute.withName('/signIn'));
                       },
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(mq.size.width, mq.size.height * 0.07),
