@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_task/Utility.dart';
 import 'package:todo_app_task/main.dart';
+import '../home/home_screen.dart';
+import 'forgot_password_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -13,6 +16,35 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   bool isPasswordVisible = false;
+  late String userId;
+
+  Future<void> _signIn() async {
+    try {
+      //get the users and check if the email and password match and get doc id
+      final QuerySnapshot<Map<String, dynamic>> users = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: _emailController.text)
+          .where('password', isEqualTo: _passwordController.text)
+          .get();
+
+      // Get the userId
+      userId = users.docs.first.id;
+      prefs?.setString('userId', userId);
+
+      // Set the isLoggedIn preference to true
+      prefs?.setBool('isLoggedIn', true);
+
+      // Navigate to HomeScreen with the userId
+      Navigator.pushNamed(context, '/home');
+
+      snackBar('Login Successful');
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        snackBar('Invalid email or password'),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData mq = MediaQuery.of(context);
@@ -83,7 +115,7 @@ class _SignInScreenState extends State<SignInScreen> {
               children: [
                 TextButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/forgot');
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordScreen(email: _emailController.text,password: _passwordController.text)));
                   },
                   child: Text(
                     'Forgot Password?',
@@ -100,31 +132,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   right: mq.size.width * 0.05,
                   bottom: mq.size.height * 0.02),
               child: ElevatedButton(
-                onPressed: () {
-                  if(_emailController.text.isEmpty || _passwordController.text.isEmpty){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please fill all the fields'),
-                      ),
-                    );
-                    return;
-                  }
-                  if(prefs?.getString('Email') != _emailController.text || prefs?.getString('Password') != _passwordController.text){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Invalid Email or Password'),
-                      ),
-                    );
-                    return;
-                  }
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Login Successful'),
-                    ),
-                  );
-                  prefs?.setBool('isLoggedIn', true);
-                  Navigator.pushReplacementNamed(context, '/home');
-                },
+                onPressed: _signIn,
                 style: ElevatedButton.styleFrom(
                   minimumSize: Size(mq.size.width, mq.size.height * 0.07),
                   foregroundColor: Colors.white,

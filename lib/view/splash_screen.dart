@@ -7,8 +7,9 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isLogged = prefs?.getBool('isLoggedIn') ?? false;
+    String userExists = prefs?.getString('userId') ?? '';
     Future.delayed(const Duration(seconds: 3), () {
-      isLogged ? Navigator.pushNamed(context, '/home') : Navigator.pushNamed(context, '/signIn');
+      isLogged & userExists.isNotEmpty ? Navigator.pushNamed(context, '/home') : Navigator.pushNamed(context, '/signIn');
     });
     return Scaffold(
       body: Center(

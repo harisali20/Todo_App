@@ -6,11 +6,17 @@ import 'package:todo_app_task/view/home/home_screen.dart';
 import 'package:todo_app_task/view/splash_screen.dart';
 import 'package:todo_app_task/view/tasks/task_details.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 SharedPreferences? prefs;
 void main() async{
   runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   prefs = await SharedPreferences.getInstance();
 }
 
@@ -33,8 +39,7 @@ class _MyAppState extends State<MyApp>{
         '/': (context) => const SplashScreen(),
         '/signIn': (context) => const SignInScreen(),
         '/signup': (context) => const SignUpScreen(),
-        '/forgot' : (context) => const ForgotPasswordScreen(),
-        '/home' : (context) => const HomeScreen(),
+        '/home': (context) => const HomeScreen(),
       },
     );
   }

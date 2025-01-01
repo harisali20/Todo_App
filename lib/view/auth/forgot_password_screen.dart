@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_app_task/Utility.dart';
-
+import 'package:todo_app_task/Utility.dart';
 class ForgotPasswordScreen extends StatefulWidget {
-  const ForgotPasswordScreen({super.key});
+  final String email;
+  final String password;
+  const ForgotPasswordScreen({super.key, required this.email, required this.password});
+
 
   @override
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
@@ -16,7 +20,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     MediaQueryData mq = MediaQuery.of(context);
-
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -47,7 +50,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       obscureText: isPasswordVisible,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
-                        hintText: 'Password',
+                        hintText: 'Enter Old Password',
                         suffixIcon: suffixButton(isPasswordVisible, false),
                         enabledBorder: borderDecor(textFieldColor),
                         focusedBorder: borderDecor(textFieldColor),
@@ -62,7 +65,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       obscureText: isConfirmPasswordVisible,
                       decoration: InputDecoration(
                         fillColor: Colors.white,
-                        hintText: 'Confirm Password',
+                        hintText: 'Enter New Password',
                         suffixIcon: suffixButton(isConfirmPasswordVisible, true),
                         enabledBorder: borderDecor(textFieldColor),
                         focusedBorder: borderDecor(textFieldColor),
@@ -82,7 +85,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   right: mq.size.width * 0.05,
                   bottom: mq.size.height * 0.02),
               child: ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
+                  await FirebaseFirestore.instance.collection('users').doc(fetchDocId(widget.email,widget.password) as String?).update({
+                    'password': _passwordController.text,
+                  });
                   ScaffoldMessenger.of(context).showSnackBar(
                     snackBar('Password Changed Successfully')
                   );

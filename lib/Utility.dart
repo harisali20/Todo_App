@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 
@@ -20,4 +21,21 @@ SnackBar snackBar(String message) {
     backgroundColor: buttonColor,
     behavior: SnackBarBehavior.floating,
   );
+}
+
+Future<String?> fetchDocId(String email, String password) async {
+  try {
+    QuerySnapshot querySnapshot =
+     await FirebaseFirestore.instance.collection('users').get();
+
+    // Iterate over the fetched documents
+    for (var doc in querySnapshot.docs) {
+      if(doc['email'] == email && doc['password'] == password){
+        return doc.id;
+      }
+    }
+  } catch (e) {
+    print('Error fetching users: $e');
+  }
+  return null;
 }
